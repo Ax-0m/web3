@@ -1,3 +1,5 @@
+// nothing but a library to fetch stuff
+
 import axios from "axios";
 // import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
