@@ -46,11 +46,10 @@ app.post(
     try {
       const exists = await userModel.findOne({ username, password });
       if (!exists) {
-        res
+        return res
           .status(400)
           .json({ message: "Wrong credentials or user doesn't exist" });
       }
-      //@ts-ignore
       const token = jwt.sign({ id: exists._id }, pvtKey);
       res.status(200).json({ message: "Signed in", JWT: token });
     } catch {
@@ -68,7 +67,7 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
 
     // Check if message and data exist
     if (!message || !message.data) {
-      res.status(400).json({ message: "Invalid transaction data" });
+      return res.status(400).json({ message: "Invalid transaction data" });
     }
 
     // Convert array back to Buffer and then to Transaction
@@ -77,17 +76,33 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
 
     console.log("Transaction fee payer:", tx.feePayer?.toString());
 
+    // Debug: List all users in database
+    const allUsers = await userModel.find({}, { username: 1, publicKey: 1 });
+    console.log("All users in database:", allUsers);
+
     // Find user by public key
     const user = await userModel.findOne({
       publicKey: tx.feePayer?.toString(),
     });
 
+    console.log(
+      "Found user:",
+      user ? { username: user.username, publicKey: user.publicKey } : "None",
+    );
+
     if (!user || !user.privateKey) {
       console.log("User not found or no private key");
-      res.status(404).json({ message: "User or private key not found" });
+      console.log("Looking for publicKey:", tx.feePayer?.toString());
+      return res.status(404).json({
+        message: "User or private key not found",
+        debugInfo: {
+          lookingFor: tx.feePayer?.toString(),
+          availableUsers: allUsers.map((u) => u.publicKey),
+        },
+      });
     }
 
-    //@ts-ignore
+    // Decode private key and create signer
     const secretKey = bs58.decode(user.privateKey);
     const signer = Keypair.fromSecretKey(secretKey);
 
@@ -121,10 +136,53 @@ app.get("/api/v1/health", (_req: Request, res: Response) => {
   });
 });
 
+// Add endpoint to list all users (for debugging)
+app.get("/api/v1/users", async (_req: Request, res: Response) => {
+  try {
+    console.log("Fetching all users from database...");
+    const users = await userModel.find(
+      {},
+      { username: 1, publicKey: 1, _id: 0 },
+    );
+    console.log("Found users:", users);
+    res.json({
+      message: "Users fetched successfully",
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({
+      message: "Error fetching users",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+});
+
+// Add database connection test
+app.get("/api/v1/db-test", async (_req: Request, res: Response) => {
+  try {
+    console.log("Testing database connection...");
+    const count = await userModel.countDocuments();
+    console.log("Database connection successful, user count:", count);
+    res.json({
+      message: "Database connection successful",
+      userCount: count,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    res.status(500).json({
+      message: "Database connection failed",
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/v1/health`);
 });
-// 3KPwMsf9TBt7N2fR8q1HXbNRBLqApktR6XAUW9o3UBnz
-// GSwpy5nj26wn8PpTGXVpLvwXi3G1J7f7LaEe2TaEZzfj
-//
+
+// 7sqcYA8R1s8aWy61FPYTNG1dtcmjVEAVgVFoXAiTFvUN
+// GMcfZrTdJZAwzFgkfYfBC2Jq2KhcqaT26BHBqWao48xt

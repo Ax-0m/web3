@@ -62,7 +62,14 @@ function App() {
         verifySignatures: false,
       });
 
-      console.log("Sending transaction to backend...");
+      console.log(
+        "Sending transaction to backend...",
+        JSON.stringify({
+          message: {
+            data: Array.from(serializedTx),
+          },
+        }),
+      );
 
       // Send to backend
       const response = await axios.post(
@@ -112,14 +119,33 @@ function App() {
   // Get all users from database (for debugging)
   const getUsers = async () => {
     try {
+      console.log("Fetching users from backend...");
       const response = await axios.get("http://localhost:3000/api/v1/users");
-      console.log("Users in database:", response.data);
-      alert(
-        `Found ${response.data.users.length} users. Check console for details.`,
-      );
+      console.log("Backend response:", response.data);
+
+      const users = response.data.users || [];
+
+      if (users.length === 0) {
+        alert(
+          "No users found in database. Create some users first using the signup endpoint.",
+        );
+      } else {
+        console.table(users); // Nice table format in console
+        alert(
+          `Found ${users.length} users:\n\n${users.map((u: any) => `${u.username}: ${u.publicKey}`).join("\n\n")}`,
+        );
+      }
     } catch (error) {
       console.error("Failed to get users:", error);
-      alert("Failed to get users!");
+
+      if (axios.isAxiosError(error)) {
+        console.error("Error response:", error.response?.data);
+        alert(
+          `Failed to get users: ${error.response?.data?.message || error.message}`,
+        );
+      } else {
+        alert("Failed to get users: Unknown error");
+      }
     }
   };
 
@@ -142,6 +168,27 @@ function App() {
     } catch (error) {
       console.error("Failed to check balance:", error);
       alert("Invalid public key or network error");
+    }
+  };
+
+  // Test database connection
+  const testDatabase = async () => {
+    try {
+      console.log("Testing database connection...");
+      const response = await axios.get("http://localhost:3000/api/v1/db-test");
+      console.log("Database test response:", response.data);
+      alert(
+        `Database connection successful!\nUser count: ${response.data.userCount}`,
+      );
+    } catch (error) {
+      console.error("Database test failed:", error);
+      if (axios.isAxiosError(error)) {
+        alert(
+          `Database test failed: ${error.response?.data?.message || error.message}`,
+        );
+      } else {
+        alert("Database test failed!");
+      }
     }
   };
 
@@ -233,6 +280,7 @@ function App() {
         style={{
           width: "100%",
           padding: "10px",
+          marginBottom: "10px",
           backgroundColor: "#17a2b8",
           color: "white",
           border: "none",
@@ -241,6 +289,21 @@ function App() {
         }}
       >
         Check From Address Balance
+      </button>
+
+      <button
+        onClick={testDatabase}
+        style={{
+          width: "100%",
+          padding: "10px",
+          backgroundColor: "#6f42c1",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+      >
+        Test Database Connection
       </button>
     </div>
   );
