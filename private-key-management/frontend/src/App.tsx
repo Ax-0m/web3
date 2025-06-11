@@ -132,6 +132,7 @@ function App() {
       } else {
         console.table(users); // Nice table format in console
         alert(
+          // @ts-ignore
           `Found ${users.length} users:\n\n${users.map((u: any) => `${u.username}: ${u.publicKey}`).join("\n\n")}`,
         );
       }

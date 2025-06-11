@@ -46,10 +46,11 @@ app.post(
     try {
       const exists = await userModel.findOne({ username, password });
       if (!exists) {
-        return res
+        res
           .status(400)
           .json({ message: "Wrong credentials or user doesn't exist" });
       }
+      //@ts-ignore
       const token = jwt.sign({ id: exists._id }, pvtKey);
       res.status(200).json({ message: "Signed in", JWT: token });
     } catch {
@@ -67,7 +68,7 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
 
     // Check if message and data exist
     if (!message || !message.data) {
-      return res.status(400).json({ message: "Invalid transaction data" });
+      res.status(400).json({ message: "Invalid transaction data" });
     }
 
     // Convert array back to Buffer and then to Transaction
@@ -93,7 +94,7 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
     if (!user || !user.privateKey) {
       console.log("User not found or no private key");
       console.log("Looking for publicKey:", tx.feePayer?.toString());
-      return res.status(404).json({
+      res.status(404).json({
         message: "User or private key not found",
         debugInfo: {
           lookingFor: tx.feePayer?.toString(),
@@ -102,7 +103,7 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
       });
     }
 
-    // Decode private key and create signer
+    //@ts-ignore
     const secretKey = bs58.decode(user.privateKey);
     const signer = Keypair.fromSecretKey(secretKey);
 
@@ -183,6 +184,3 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/v1/health`);
 });
-
-// 7sqcYA8R1s8aWy61FPYTNG1dtcmjVEAVgVFoXAiTFvUN
-// GMcfZrTdJZAwzFgkfYfBC2Jq2KhcqaT26BHBqWao48xt
