@@ -9,7 +9,6 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 
-// Use devnet to match your backend
 const connection = new Connection("https://api.devnet.solana.com");
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const sendSol = async () => {
-    // Validation
     if (!amount || !fromAddress || !toAddress) {
       alert("Please fill in all fields");
       return;
@@ -37,7 +35,6 @@ function App() {
       console.log("To:", toAddress);
       console.log("Amount:", amount);
 
-      // Create PublicKey objects
       const fromPubkey = new PublicKey(fromAddress);
       const toPubkey = new PublicKey(toAddress);
 
@@ -49,14 +46,12 @@ function App() {
 
       const tx = new Transaction().add(ix);
 
-      // Get recent blockhash
       const { blockhash } = await connection.getLatestBlockhash();
       tx.recentBlockhash = blockhash;
       tx.feePayer = fromPubkey;
 
       console.log("Transaction created, fee payer:", tx.feePayer.toString());
 
-      // Serialize transaction
       const serializedTx = tx.serialize({
         requireAllSignatures: false,
         verifySignatures: false,
@@ -71,7 +66,6 @@ function App() {
         }),
       );
 
-      // Send to backend
       const response = await axios.post(
         "http://localhost:3000/api/v1/txn/sign",
         {
@@ -84,7 +78,6 @@ function App() {
       console.log("Transaction response:", response.data);
       alert(`Transaction successful! Signature: ${response.data.signature}`);
 
-      // Clear form after successful transaction
       setAmount("");
       setFromAddress("");
       setToAddress("");
@@ -104,7 +97,6 @@ function App() {
     }
   };
 
-  // Test backend connection
   const testConnection = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/v1/health");
@@ -116,7 +108,6 @@ function App() {
     }
   };
 
-  // Get all users from database (for debugging)
   const getUsers = async () => {
     try {
       console.log("Fetching users from backend...");
@@ -130,9 +121,8 @@ function App() {
           "No users found in database. Create some users first using the signup endpoint.",
         );
       } else {
-        console.table(users); // Nice table format in console
+        console.table(users);
         alert(
-          // @ts-ignore
           `Found ${users.length} users:\n\n${users.map((u: any) => `${u.username}: ${u.publicKey}`).join("\n\n")}`,
         );
       }
@@ -150,7 +140,6 @@ function App() {
     }
   };
 
-  // Check balance of from address
   const checkBalance = async () => {
     if (!fromAddress) {
       alert("Please enter a From Address first");
@@ -172,7 +161,6 @@ function App() {
     }
   };
 
-  // Test database connection
   const testDatabase = async () => {
     try {
       console.log("Testing database connection...");
