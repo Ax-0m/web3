@@ -17,11 +17,11 @@ app.post(
   userValidation,
   userValidationSignup,
   async (req: Request, res: Response) => {
-    const { username, password } = req.body();
+    const { username, password } = req.body;
     const keypair = new Keypair();
 
     try {
-      userModel.create({
+      await userModel.create({
         username,
         password,
         publicKey: keypair.publicKey.toString(),
@@ -44,7 +44,7 @@ app.post(
   "/api/v1/signin",
   userValidation,
   async (req: Request, res: Response) => {
-    const { username, password } = req.body();
+    const { username, password } = req.body;
 
     try {
       const exists = await userModel.findOne({

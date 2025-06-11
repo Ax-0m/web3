@@ -31,7 +31,7 @@ export const userValidationSignup = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const username = req.body;
+  const { username } = req.body;
   try {
     const exists = await userModel.findOne({ username });
     if (!exists) {
@@ -39,28 +39,6 @@ export const userValidationSignup = async (
     } else {
       res.status(400).json({
         message: "User exists, pls signin",
-      });
-    }
-  } catch (err: any) {
-    res.status(500).json({
-      error: err.message,
-    });
-  }
-};
-
-export const userValidationLogin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { username, password } = req.body;
-  try {
-    const exists = await userModel.find({ username, password });
-    if (exists) {
-      next();
-    } else {
-      res.status(400).json({
-        message: "Wrong credentials/User doesn't exist",
       });
     }
   } catch (err: any) {
