@@ -59,29 +59,24 @@ app.post(
   },
 );
 
-// Fixed transaction signing endpoint
 app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
   try {
     console.log("Received transaction signing request:", req.body);
 
     const { message } = req.body;
 
-    // Check if message and data exist
     if (!message || !message.data) {
       res.status(400).json({ message: "Invalid transaction data" });
     }
 
-    // Convert array back to Buffer and then to Transaction
     const txBuffer = Buffer.from(message.data);
     const tx = Transaction.from(txBuffer);
 
     console.log("Transaction fee payer:", tx.feePayer?.toString());
 
-    // Debug: List all users in database
     const allUsers = await userModel.find({}, { username: 1, publicKey: 1 });
     console.log("All users in database:", allUsers);
 
-    // Find user by public key
     const user = await userModel.findOne({
       publicKey: tx.feePayer?.toString(),
     });
@@ -107,10 +102,8 @@ app.post("/api/v1/txn/sign", async (req: Request, res: Response) => {
     const secretKey = bs58.decode(user.privateKey);
     const signer = Keypair.fromSecretKey(secretKey);
 
-    // Sign the transaction
     tx.sign(signer);
 
-    // Send the transaction
     const sig = await connection.sendRawTransaction(tx.serialize());
 
     console.log("Transaction sent with signature:", sig);
@@ -129,7 +122,6 @@ app.get("/api/v1/txn", (_req: Request, res: Response) => {
   res.json({ message: "Transaction endpoint is working" });
 });
 
-// Add a test endpoint to verify server is running
 app.get("/api/v1/health", (_req: Request, res: Response) => {
   res.json({
     message: "Server is running",
@@ -137,7 +129,6 @@ app.get("/api/v1/health", (_req: Request, res: Response) => {
   });
 });
 
-// Add endpoint to list all users (for debugging)
 app.get("/api/v1/users", async (_req: Request, res: Response) => {
   try {
     console.log("Fetching all users from database...");
@@ -160,7 +151,6 @@ app.get("/api/v1/users", async (_req: Request, res: Response) => {
   }
 });
 
-// Add database connection test
 app.get("/api/v1/db-test", async (_req: Request, res: Response) => {
   try {
     console.log("Testing database connection...");
