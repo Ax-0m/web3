@@ -1,0 +1,109 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_brand",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_numberOfDoors",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "brand",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "description",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "numberOfDoors",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"solidity/Inheritance2.sol": "Car"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"solidity/Inheritance.sol": {
+			"keccak256": "0x692f066edbcb64f83bce5453732c5b66575208309c40814268368e3ab2ea1553",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://eadeef11c3d4f9d0c7882b83c153d7263216774ee0cad1ef96386b5a1cc0ed0e",
+				"dweb:/ipfs/QmfNzK3Tcy5YCtRQSnZZ9MTNcVnnXKMXSAQ3D6YxY92Gcw"
+			]
+		},
+		"solidity/Inheritance2.sol": {
+			"keccak256": "0x8eb1ec17020c3e41109d6d9987189ef0df7c85ab64998dc19b20d9744ffae095",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e02f541186a68e9dda16aa6801ceb8fb031227f0023ff71d6b8b70e106399b5",
+				"dweb:/ipfs/QmUFVH8byhRnLdVpaaAyZ5tGHEFef4HfYSqcU16nxDJGy1"
+			]
+		}
+	},
+	"version": 1
+}

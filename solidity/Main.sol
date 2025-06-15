@@ -8,6 +8,11 @@ set up any required logic when the contract is deployed to the Ethereum blockcha
 As a naming convention, if a constructor parameter is intended to initialize 
 a global (state) variable, the parameter should be named similarly to the 
 state variable but with a preceding underscore (_) to distinguish it.
+
+public -- same, derived, other contracts and external users
+external -- other contracts and external users
+internal -- same contract and derived contract
+private -- same contract only
 */
 
 
