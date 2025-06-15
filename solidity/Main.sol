@@ -24,6 +24,19 @@ contract Calculator {
         num += _value;
     }
 
+    function subtract (uint256 _value) public {
+        num -= _value;
+    }
+
+    function multiply(uint256 _value) public {
+        num *= _value;
+    }
+
+    function divide(uint256 _value) public {
+        require(_value != 0);
+        num = num / _value;
+    }
+
     function getValue() public view returns (uint256) {
         return num;
     }
