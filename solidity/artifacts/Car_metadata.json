@@ -89,19 +89,19 @@
 	},
 	"sources": {
 		"solidity/Inheritance.sol": {
-			"keccak256": "0x692f066edbcb64f83bce5453732c5b66575208309c40814268368e3ab2ea1553",
+			"keccak256": "0x49d9b54de4a166a01f16abad500f5e7fd3b20543a0b5197244198cdf6b3a6297",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://eadeef11c3d4f9d0c7882b83c153d7263216774ee0cad1ef96386b5a1cc0ed0e",
-				"dweb:/ipfs/QmfNzK3Tcy5YCtRQSnZZ9MTNcVnnXKMXSAQ3D6YxY92Gcw"
+				"bzz-raw://68c3cfb54c914a6732db2fcc78270604f71ebe6018b2159b78ab7757f8417e6d",
+				"dweb:/ipfs/QmUFpgzFHh54V4Z7eQjwh6vuwjZTxxRfsrhkJpr1j2dZCU"
 			]
 		},
 		"solidity/Inheritance2.sol": {
-			"keccak256": "0x8eb1ec17020c3e41109d6d9987189ef0df7c85ab64998dc19b20d9744ffae095",
+			"keccak256": "0xf1463f53c10d32bef8fe9bd2b39193d34bf97cafa1c759c4189b861e8a620787",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9e02f541186a68e9dda16aa6801ceb8fb031227f0023ff71d6b8b70e106399b5",
-				"dweb:/ipfs/QmUFVH8byhRnLdVpaaAyZ5tGHEFef4HfYSqcU16nxDJGy1"
+				"bzz-raw://003282c45898a588d1e8bd57778d6264da33d01394a18de5ae9ede44457f313e",
+				"dweb:/ipfs/QmTBb67KpuoCWWWFVQNmKr9oW9s92qPdfBXcLf8kFnHp8m"
 			]
 		}
 	},
