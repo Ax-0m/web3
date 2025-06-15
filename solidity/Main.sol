@@ -14,9 +14,17 @@ state variable but with a preceding underscore (_) to distinguish it.
 pragma solidity >=0.8.2 <0.9.0;
 
 contract Calculator {
-    uint num = 0;
+    uint256 num = 0;
 
-    constructor(uint _num) {
+    constructor(uint256 _num) {
         num = _num;
+    }
+
+    function add(uint256 _value) public {
+        num += _value;
+    }
+
+    function getValue() public view returns (uint256) {
+        return num;
     }
 }
