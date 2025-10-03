@@ -1,23 +1,41 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+pragma solidity >=0.7.0 <0.9.0;
 
-/*
-    memory   -- The variable is temporary (not saved on blockchain), just local to the function.
-    pure     -- Does nothing to contract state, just returns a value.
-    virtual  -- Allows child contracts to override this function.
-*/
+contract Inheritance {
+    uint startTime;
+    uint tenYears;
+    uint public lastVisited;
+    address Owner;
+    address payable recipient;
 
-
-pragma solidity >=0.8.2 <0.9.0;
-
- contract Vehicle {
-
-    string public brand;
-
-    constructor (string memory _brand) {
-        brand = _brand;
+    constructor(address payable _recipient) {
+        tenYears = 365 days * 10;
+        startTime = block.timestamp;
+        lastVisited = block.timestamp;
+        Owner = msg.sender;
+        recipient = _recipient;
     }
 
-    function description() public pure virtual returns (string memory) {
-        return "This is a vehicle";
+    modifier onlyOwner {
+        require(msg.sender == Owner);
+        _;
+    }
+
+    function deposit() public payable onlyOwner {
+        lastVisited = block.timestamp;
+    }
+
+    function ping() public onlyOwner {
+        lastVisited = block.timestamp;
+    }
+
+    modifier onlyRecipient {
+        require(msg.sender == recipient);
+        _;
+    }
+
+    function claim(address from) external onlyRecipient {
+        require(lastVisited < block.timestamp - tenYears);
+        payable(recipient).transfer(address(this).balance);
     }
 }
